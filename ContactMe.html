@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <title>feedback</title>
+    </head>
+    <body>
+        <h1>Thank you for visiting my website!</h1>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/AjMzBofDWFQ?si=QPdgKdvEsDDyu5Am" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        
+        <form action="" name="feedback">
+            <p> Please enter your feedback</p>
+            <p>
+                First name:<input type="text" name="fname" placeholder="anonymous"required>
+                Last name:<input type="text" name="lname" placeholder="anonymous"required>
+            </p>
+            <p>
+                Email Address*:<input type="email" name="mail" placeholder="name@domain.copm"required>
+            </p>
+            <p>
+                Do recommend this website?
+                <input type="radio" name="yesno" value="yes" required>Yes
+                <input type="radio" name="yesno" value="no" required>No
+            </p>
+            <p>
+                <select name="website">
+                    <option value="Google">Google</option>
+                    <option value="Bing">Bing</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="Reddit">Reddit</option>
+                    <option value="Twitter">Twitter</option>
+                    <option value="YouTube">Youtube</option>
+                    <option value="Other">Other</option>
+                </select>
+            </p>
+            <p>
+                What would you rate this website out of 10?
+				<input type="range" name="rating" min="1" max="10" step="1" value="5"><br>
+                What rating did you give?
+                <input type="number" name="rating2" min="1" max="10">
+            </p>
+            <p>
+                Any additional comments?
+                <br>
+                <textarea name="comments" rows="5" cols="40" placeholder="Enter text here..."></textarea>
+            </p>
+            <p>
+                What is your favorite color?
+            	<input type="color" name="color">
+            </p>
+            <p>
+                What is todays date?
+                <input type="date" name="dates">
+            </p>
+            <p>
+	    		<input type="submit" value="Submit">
+			</p>
+        </form>
+    </body>
+
+</html>
