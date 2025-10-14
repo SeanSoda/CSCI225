@@ -1,0 +1,181 @@
+body {
+  background-image: url(../img/Da_wall.png);
+}
+
+ul li {
+  display: inline-block;
+}
+
+.introductiontitle:hover {
+  color: rgb(190, 116, 233);
+}
+
+.introductiontitle {
+  position: absolute;
+  top: 25%;
+  left: 10%;
+  color: white;
+  font-family: "UnifrakturCook";
+}
+
+div.introduction {
+  display: none;
+}
+
+.introductiontitle:hover+.introduction {
+  display: block;
+  position: relative;
+  top: 10vh;
+  left: 65vh;
+  width: 750px;
+  background-color: blanchedalmond;
+  font-family: "UnifrakturCook";
+  z-index: 10;
+
+
+}
+
+.assignmenttitle {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  color: white;
+  font-family: "UnifrakturCook";
+
+}
+
+.assignmenttitle:hover {
+  color: rgb(190, 116, 233);
+
+}
+
+div.assignment {
+  display: none;
+}
+
+.assignmenttitle:hover+.assignment {
+  display: block;
+  position: relative;
+  top: 40vh;
+  left: 70vh;
+  width: 510px;
+  background-color: blanchedalmond;
+  font-family: "UnifrakturCook";
+  z-index: 10;
+
+}
+
+.portfoliotitle {
+  position: absolute;
+  top: 40%;
+  right: 10%;
+  color: white;
+  font-family: "UnifrakturCook";
+
+}
+
+.portfoliotitle:hover {
+  color: rgb(190, 116, 233);
+
+}
+
+div.portfolio {
+  display: none;
+}
+
+.portfoliotitle:hover+.portfolio {
+  display: block;
+  position: relative;
+  top: 40vh;
+  left: 70vh;
+  width: 750px;
+  background-color: blanchedalmond;
+  font-family: "UnifrakturCook";
+  z-index: 10;
+
+}
+
+.paintingtitle:hover {
+  color: rgb(190, 116, 233);
+}
+
+.paintingtitle:hover+.paintings {
+  display: block;
+  position: relative;
+  top: 15vh;
+  left: 75vh;
+  width: 510px;
+  background-color: blanchedalmond;
+  font-family: "UnifrakturCook";
+  z-index: 10;
+
+}
+
+.paintingtitle {
+  position: absolute;
+  top: 37%;
+  left: 10%;
+  color: white;
+  font-family: "UnifrakturCook";
+
+}
+
+div.paintings {
+  display: none;
+}
+
+.paintingtitle:hover+.paintings {
+  display: block;
+}
+
+.scheduletitle:hover {
+  color: rgb(190, 116, 233);
+}
+
+.scheduletitle {
+  position: absolute;
+  top: 25%;
+  right: 10%;
+  color: white;
+}
+
+div.schedule {
+  display: none;
+}
+
+.scheduletitle:hover+.schedule {
+  display: block;
+  position: relative;
+  top: 15vh;
+  left: 65vh;
+  width: 750px;
+  background-color: blanchedalmond;
+  font-family: "UnifrakturCook";
+  z-index: 10;
+
+}
+.contact {
+  position: absolute;
+  bottom: 11vh;
+  color: blue;
+  z-index: 10;
+}
+
+.contactinto {
+  position: absolute;
+  bottom: 10%;
+  height: 200px;
+  width: 200px;
+  background-image: url(../img/scroll.png);
+  font-family: "UnifrakturCook";
+}
+.decor{
+  position: fixed;
+  left: 60vh;
+  top: 15vh;
+}
+
+.navbar {
+  background-color: bisque;
+
+}
