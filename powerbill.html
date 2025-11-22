@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Georgia Power Bill Calculator</title>
+    <style>
+                /* Bill Details Table Styling */
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: flex-start; gap: 40px; padding: 20px; background-color: #f4f4f4; }
+        .container { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 450px; }
+        h1 { font-size: 1.8em; margin-bottom: 5px; }
+        p.small-text { font-size: 0.9em; color: #555; margin-bottom: 20px; }
+        .input-group, .checkbox-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        label { flex-grow: 1; margin-right: 15px; }
+        input[type="number"], input[type="text"] { width: 100px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; text-align: right; }
+        input[type="checkbox"] { width: auto; }
+        .buttons { display: flex; justify-content: center; gap: 10px; margin-top: 30px; }
+        button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        #submitBtn { background-color: #007bff; color: white; }
+        #resetBtn { background-color: #6c757d; color: white; }
+        #billDetails { width: 450px; }
+        #billDetails h2 { font-size: 1.8em; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; text-align: left; }
+        td:nth-child(2) { text-align: right; font-weight: bold; }
+        tr { border-bottom: 1px solid #eee; }
+        tr:last-child { border-bottom: none; }
+        .subtotal-row { background-color: #f9f9f9; font-weight: bold; }
+        .total-row { background-color: #e0e0e0; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Georgia Power Bill Calculator</h1>
+        <p class="small-text">
+            The utility bill calculator is a resource that the Commission is making available that allows a consumer to check the accuracy of his/her monthly electric bill. A bill calculator has been prepared for customers of the Georgia Power Company. This bill calculator applies only to residential customers who are receiving service under the standard Residential Tariff (R-27). For more details regarding Georgia Power's residential tariff offerings, please visit Georgia Power Pricing & Rates.
+            <br><br>
+            Effective August 2023
+        </p>
+
+        <form id="calculatorForm">
+            <div class="input-group">
+                <label for="monthlyUsage">Enter your Monthly Usage in kilowatt hours (kWh):</label>
+                <input type="number" id="monthlyUsage" value="1000" min="0" required>
+            </div>
+
+            <div class="input-group">
+                <label for="billDays">Enter the number of days for your current billing period:</label>
+                <input type="number" id="billDays" value="31" min="1" max="31" required>
+            </div>
+
+            <div class="checkbox-group">
+                <label for="insideCity">Is your residence INSIDE the city limits of your city?</label>
+                <input type="checkbox" id="insideCity">
+            </div>
+
+            <div class="checkbox-group">
+                <label for="isSummer">Is this a Summer month (June – September)?</label>
+                <input type="checkbox" id="isSummer">
+            </div>
+
+            <div class="input-group">
+                <label for="salesTax">Enter Sales Tax(%):</label>
+                <input type="number" id="salesTax" value="7" step="0.01" min="0" required>
+            </div>
+
+            <div class="buttons">
+                <button type="submit" id="submitBtn">Submit</button>
+                <button type="reset" id="resetBtn">Reset</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container" id="billDetails">
+        <h2>Details of your bill</h2>
+        <table>
+            <thead>
+                <tr><th>Items</th><th>Fees</th></tr>
+            </thead>
+            <tbody id="billOutput">
+                <tr><td>Base Charge:</td><td id="outputBaseCharge">$ 0.00</td></tr>
+                <tr><td>Tier 1 Component (kWh):</td><td id="outputTier1Charge">$ 0.00</td></tr>
+                <tr><td>Tier 2 Component (kWh):</td><td id="outputTier2Charge">$ 0.00</td></tr>
+                <tr><td>Tier 3 Component (kWh):</td><td id="outputTier3Charge">$ 0.00</td></tr>
+                <tr class="subtotal-row"><td>Base Revenue -- Base Bill Subtotal:</td><td id="outputBaseRevenue">$ 0.00</td></tr>
+                <tr><td>Fuel Cost Rider:</td><td id="outputFuelCost">$ 0.00</td></tr>
+                <tr><td>Demand Side Management Residential Rider:</td><td id="outputDemandSide">$ 0.00</td></tr>
+                <tr><td>Nuclear Construction Cost Recovery Rider:</td><td id="outputNuclearCost">$ 0.00</td></tr>
+                <tr><td>Environmental Compliance Cost Recovery Rider:</td><td id="outputEnvironmentalCost">$ 0.00</td></tr>
+                <tr class="subtotal-row"><td>Total Revenue -- Current Service Subtotal:</td><td id="outputTotalRevenue">$ 0.00</td></tr>
+                <tr><td>Franchise Fee:</td><td id="outputFranchiseFee">$ 0.00</td></tr>
+                <tr class="subtotal-row"><td>Total (excluding tax):</td><td id="outputTotalExTax">$ 0.00</td></tr>
+                <tr class="total-row"><td>TOTAL (w/ tax):</td><td id="outputTotalWithTax">$ 0.00</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('calculatorForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form from submitting normally
+    calculateBill();
+});
+
+function calculateBill() {
+    // --- 1. Read and Convert Inputs ---
+    const usage = parseFloat(document.getElementById('monthlyUsage').value);
+    const days = parseFloat(document.getElementById('billDays').value);
+    const taxRate = parseFloat(document.getElementById('salesTax').value);
+    const insideCity = document.getElementById('insideCity').checked;
+    const isSummer = document.getElementById('isSummer').checked;
+
+    // Helper function to format a number to a currency string
+    const formatCurrency = (num) => `$ ${num.toFixed(2)}`;
+
+    // --- 2. Define Rates ---
+    const RATE_BASE_CHARGE_PER_DAY = 0.4603; // 46.03¢/day
+    
+    // Tiered Usage Rates
+    const rates = isSummer ? {
+        tier1: 0.066678, // up to 650kWh
+        tier2: 0.110748, // next 350kWh (651-1000)
+        tier3: 0.114625  // over 1000kWh
+    } : {
+        tier1: 0.062404, // up to 650kWh
+        tier2: 0.062404, // next 350kWh (651-1000)
+        tier3: 0.062404  // over 1000kWh
+    };
+
+    // Rider Percentages (as decimals)
+    const RIDER_DEMAND_SIDE_PCT = 0.015989; // 1.5989%
+    const RIDER_NUCLEAR_PCT = 0.041562;    // 4.1562%
+    const RIDER_ENVIRONMENTAL_PCT = 0.162813; // 16.2813%
+
+    // Franchise Fee Percentages (as decimals)
+    const FEE_FRANCHISE_CITY_PCT = 0.030674; // 3.0674% (Inside)
+    const FEE_FRANCHISE_OUTSIDE_PCT = 0.011839; // 1.1839% (Outside)
+    
+    // Fuel Cost Rider
+    const RATE_FUEL_COST = isSummer ? 0.045876 : 0.042859;
+
+    // --- 3. Base Charge ---
+    const baseCharge = RATE_BASE_CHARGE_PER_DAY * days;
+
+    // --- 4. Tiered Usage Charge ---
+    let remainingUsage = usage;
+    let tier1Charge = 0;
+    let tier2Charge = 0;
+    let tier3Charge = 0;
+
+    // Tier 1: up to 650 kWh
+    const tier1Limit = 650;
+    const usageTier1 = Math.min(remainingUsage, tier1Limit);
+    tier1Charge = usageTier1 * rates.tier1;
+    remainingUsage -= usageTier1;
+
+    // Tier 2: next 350 kWh (up to 1000 kWh total)
+    const tier2Limit = 350;
+    const usageTier2 = Math.min(remainingUsage, tier2Limit);
+    tier2Charge = usageTier2 * rates.tier2;
+    remainingUsage -= usageTier2;
+
+    // Tier 3: over 1000 kWh
+    const usageTier3 = Math.max(0, remainingUsage);
+    tier3Charge = usageTier3 * rates.tier3;
+    
+    // --- 5. Base Revenue (Base Bill Subtotal) ---
+    const baseRevenue = baseCharge + tier1Charge + tier2Charge + tier3Charge;
+
+    // --- 6. Fuel Cost Rider ---
+    const fuelCostRider = usage * RATE_FUEL_COST;
+
+    // --- 7. Percentage-Based Riders (of Base Revenue) ---
+    const demandSideRider = baseRevenue * RIDER_DEMAND_SIDE_PCT;
+    const nuclearCostRider = baseRevenue * RIDER_NUCLEAR_PCT;
+    const environmentalCostRider = baseRevenue * RIDER_ENVIRONMENTAL_PCT;
+
+    // --- 8. Total Revenue (Current Service Subtotal) ---
+    const totalRevenue = baseRevenue + fuelCostRider + demandSideRider + nuclearCostRider + environmentalCostRider;
+
+    // --- 9. Franchise Fee ---
+    const franchiseFeeRate = insideCity ? FEE_FRANCHISE_CITY_PCT : FEE_FRANCHISE_OUTSIDE_PCT;
+    const franchiseFee = totalRevenue * franchiseFeeRate;
+
+    // --- 10. Total (excluding tax) ---
+    const totalExcludingTax = totalRevenue + franchiseFee;
+
+    // --- 11. Total (w/ tax) ---
+    const salesTaxAmount = totalExcludingTax * (taxRate / 100);
+    const totalWithTax = totalExcludingTax + salesTaxAmount;
+
+    // --- 12. Display Results ---
+    document.getElementById('outputBaseCharge').textContent = formatCurrency(baseCharge);
+    document.getElementById('outputTier1Charge').textContent = formatCurrency(tier1Charge);
+    document.getElementById('outputTier2Charge').textContent = formatCurrency(tier2Charge);
+    document.getElementById('outputTier3Charge').textContent = formatCurrency(tier3Charge);
+    document.getElementById('outputBaseRevenue').textContent = formatCurrency(baseRevenue);
+    document.getElementById('outputFuelCost').textContent = formatCurrency(fuelCostRider);
+    document.getElementById('outputDemandSide').textContent = formatCurrency(demandSideRider);
+    document.getElementById('outputNuclearCost').textContent = formatCurrency(nuclearCostRider);
+    document.getElementById('outputEnvironmentalCost').textContent = formatCurrency(environmentalCostRider);
+    document.getElementById('outputTotalRevenue').textContent = formatCurrency(totalRevenue);
+    document.getElementById('outputFranchiseFee').textContent = formatCurrency(franchiseFee);
+    document.getElementById('outputTotalExTax').textContent = formatCurrency(totalExcludingTax);
+    document.getElementById('outputTotalWithTax').textContent = formatCurrency(totalWithTax);
+
+    // --- 13. Conditional Redirect ---
+    if (totalWithTax > 500) {
+        window.open('https://www.georgiapower.com/residential/save-money-and-energy/products-programs.html', '_blank');
+    }
+}
+    </script>
+</body>
+</html>
